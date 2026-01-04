@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Aggregator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .highlight {
+            background-color: #fef08a;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+<header class="bg-white shadow p-4">
+    <h1 class="text-2xl font-bold text-center">
+        Freelance Job Aggregator
+    </h1>
+</header>
+
+<main class="flex-1 container mx-auto px-4 py-6">
+
+    <!-- GRID -->
+    <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
+        {% for job in jobs %}
+        <div class="bg-white rounded-xl shadow hover:shadow-lg transition flex flex-col">
+
+            <!-- TITLE -->
+            <div class="p-4">
+                <h2 class="text-lg font-semibold mb-2 line-clamp-2">
+                    {{ job.title }}
+                </h2>
+
+                <!-- DESCRIPTION -->
+                <p class="text-gray-600 text-sm line-clamp-4">
+                    {{ job.description }}
+                </p>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="mt-auto border-t p-4 flex items-center justify-between">
+                <div>
+                    {% if job.price %}
+                        <span class="text-green-600 font-bold text-sm">
+                            {{ job.price }}
+                        </span>
+                    {% else %}
+                        <span class="text-gray-400 text-sm italic">
+                            Ціна не вказана
+                        </span>
+                    {% endif %}
+                </div>
+
+                <a href="{{ job.href }}"
+                   target="_blank"
+                   class="text-blue-600 font-semibold hover:underline">
+                    Деталі →
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- PAGINATION -->
+    {% if page_obj %}
+    <div class="flex justify-center mt-8">
+        <nav class="inline-flex gap-1">
+
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    ←
+                </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="px-3 py-1 rounded bg-blue-600 text-white">
+                        {{ num }}
+                    </span>
+                {% else %}
+                    <a href="?page={{ num }}"
+                       class="px-3 py-1 border rounded hover:bg-gray-100">
+                        {{ num }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                   class="px-3 py-1 border rounded hover:bg-gray-100">
+                    →
+                </a>
+            {% endif %}
+
+        </nav>
+    </div>
+    {% endif %}
+
+</main>
+
+<footer class="bg-white shadow p-4 text-center text-gray-400 text-sm">
+    © 2026 Job Aggregator
+</footer>
+
+</body>
+</html>
